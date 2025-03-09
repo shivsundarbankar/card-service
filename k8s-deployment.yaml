@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: card-service-info
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: card-service-deployment
+  namespace: card-service-info
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: my-card-service-app
+  template:
+    metadata:
+      labels:
+        app: my-card-service-app
+    spec:
+      containers:
+        - name: card-service-container
+          image: card-service-release:1.0
+          ports:
+            - containerPort: 8081
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: card-service-svc
+  namespace: card-service-info
+spec:
+  type: NodePort
+  selector:
+    app:  my-card-service-app
+  ports:
+    - protocol: TCP
+      port: 8081
+      targetPort: 8081
