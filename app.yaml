@@ -1,0 +1,52 @@
+# 1. Create a Namespace for isolation
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: card-app-namespace
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: card-service-app-deployment
+  namespace: card-app-namespace
+spec:
+  selector:
+    matchLabels:
+      app: card-service-app
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: card-service-app
+    spec:
+      containers:
+       - name: card-service-app
+         image: "cardapp:1.0.0"
+         ports:
+           - containerPort: 8081
+         env:
+           - name: DB_HOST
+             value: mysql-service
+           - name: DB_NAME
+             value: unibank
+           - name: DB_USERNAME
+             value: root
+           - name: DB_PASSWORD
+             value: rootPassword
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: card-service-app-svc
+  namespace: card-app-namespace
+spec:
+  selector:
+    app: card-service-app
+  ports:
+    - protocol: "TCP"
+      port: 8081
+      targetPort: 8081
+  type: NodePort
+
+
