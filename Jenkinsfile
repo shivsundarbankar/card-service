@@ -55,8 +55,8 @@ pipeline {
             steps {
                 script {
 
-                    sh "minikube -p minikube docker-env --shell powershell | Invoke-Expression
-"
+                    sh "minikube -p minikube docker-env --shell powershell | Invoke-Expression"
+
 
 
                     // Apply any other changes in the YAML file
