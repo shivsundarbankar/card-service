@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_NAME = "card-service"
         DOCKER_REPO = "shivsundar21/${APP_NAME}"
-        IMAGE_TAG = "1.0.4"
+        IMAGE_TAG = "1.0.5"
         BRANCH_NAME = "build-to-jenkins"
         KUBERNETES_FILE = "k8s-deployment.yaml"
         KUBE_NAMESPACE = "card-service-info"
@@ -51,14 +51,33 @@ pipeline {
             }
         }
 
+        stage("Ensure Minikube is Running") {
+            steps {
+                script {
+                    if (isUnix()) {
+                        sh """
+                            minikube status || minikube start
+                            kubectl config use-context minikube
+                        """
+                    } else {
+                        bat """
+                            minikube status || minikube start
+                            kubectl config use-context minikube
+                        """
+                    }
+                }
+            }
+        }
+
         stage("Deploy to Kubernetes") {
             steps {
                 script {
-                    // Correctly set up Minikube Docker environment
                     if (isUnix()) {
                         sh "eval \$(minikube -p minikube docker-env)"
                     } else {
-                        bat "powershell.exe -Command \"& { minikube -p minikube docker-env --shell powershell }\""
+                        bat """
+                            FOR /F "tokens=*" %%i IN ('minikube -p minikube docker-env --shell cmd') DO @%%i
+                        """
                     }
 
                     // Deploy application to Kubernetes
