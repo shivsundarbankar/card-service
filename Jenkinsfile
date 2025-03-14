@@ -4,7 +4,7 @@ pipeline {
      environment {
         APP_NAME = "card-service"
         DOCKER_REPO = "shivsundar21/${APP_NAME}"
-        IMAGE_TAG = "release:1.0.1"
+        IMAGE_TAG = "release-1.0.1"
         BRANCH_NAME = "build-to-jenkins"
      }
 
