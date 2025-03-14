@@ -4,7 +4,7 @@ pipeline {
     environment {
         APP_NAME = "card-service"
         DOCKER_REPO = "shivsundar21/${APP_NAME}"
-        IMAGE_TAG = "1.0.2"  // Use '-' instead of ':' in tags
+        IMAGE_TAG = "1.0.3"  // Use '-' instead of ':' in tags
         BRANCH_NAME = "build-to-jenkins"
         KUBERNETES_FILE = "k8s-deployment.yaml"
         KUBE_NAMESPACE = "card-service-info"  // Update this if your app is in another namespace
