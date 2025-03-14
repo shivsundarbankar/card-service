@@ -54,11 +54,10 @@ pipeline {
         stage("Deploy to Kubernetes") {
             steps {
                 script {
-                    // Ensure kubectl is using the correct context
-                    sh "kubectl config current-context"
 
-                    // Set the new image in the existing deployment
-                    sh "kubectl set image deployment/${APP_NAME} ${APP_NAME}=${DOCKER_REPO}:${IMAGE_TAG} -n ${KUBE_NAMESPACE}"
+                    sh "minikube -p minikube docker-env --shell powershell | Invoke-Expression
+"
+
 
                     // Apply any other changes in the YAML file
                     sh "kubectl apply -f ${KUBERNETES_FILE} -n ${KUBE_NAMESPACE}"
